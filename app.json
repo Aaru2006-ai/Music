@@ -1,0 +1,89 @@
+{
+  "name": "Telegram Music Bot",
+  "description": "Enterprise-grade Telegram voice chat music streaming bot",
+  "repository": "https://github.com/YOUR_USERNAME/YOUR_REPO",
+  "logo": "",
+  "keywords": ["telegram", "music", "bot", "python", "pyrogram"],
+  "buildpacks": [
+    { "url": "heroku/python" },
+    { "url": "https://github.com/jonathanong/heroku-buildpack-ffmpeg-latest.git" },
+    { "url": "heroku-community/apt" }
+  ],
+  "env": {
+    "API_ID": {
+      "description": "Telegram API ID from my.telegram.org",
+      "required": true
+    },
+    "API_HASH": {
+      "description": "Telegram API Hash from my.telegram.org",
+      "required": true
+    },
+    "BOT_TOKEN": {
+      "description": "Bot token from @BotFather",
+      "required": true
+    },
+    "STRING_SESSION": {
+      "description": "Pyrogram string session for userbot assistant",
+      "required": true
+    },
+    "MONGO_DB_URI": {
+      "description": "MongoDB Atlas connection URI",
+      "required": true
+    },
+    "REDIS_URI": {
+      "description": "Redis connection URI (Heroku Redis add-on)",
+      "required": true
+    },
+    "LOG_GROUP_ID": {
+      "description": "Telegram group ID for bot logs (negative integer)",
+      "required": true
+    },
+    "OWNER_ID": {
+      "description": "Your Telegram user ID (integer)",
+      "required": true
+    },
+    "SUPPORT_CHANNEL": {
+      "description": "Support channel username (e.g. @MyBotSupport)",
+      "required": false
+    },
+    "SUPPORT_GROUP": {
+      "description": "Support group username",
+      "required": false
+    },
+    "SPOTIFY_CLIENT_ID": {
+      "description": "Spotify app Client ID (optional)",
+      "required": false
+    },
+    "SPOTIFY_CLIENT_SECRET": {
+      "description": "Spotify app Client Secret (optional)",
+      "required": false
+    },
+    "DURATION_LIMIT": {
+      "description": "Maximum track duration in minutes",
+      "value": "180",
+      "required": false
+    },
+    "STREAM_QUALITY": {
+      "description": "Audio bitrate in kbps (64/96/128)",
+      "value": "128",
+      "required": false
+    },
+    "AUTO_LEAVING_ASSISTANT": {
+      "description": "Leave VC when queue is empty (True/False)",
+      "value": "True",
+      "required": false
+    }
+  },
+  "addons": [
+    {
+      "plan": "heroku-redis:mini",
+      "as": "REDIS"
+    }
+  ],
+  "formation": {
+    "worker": {
+      "quantity": 1,
+      "size": "basic"
+    }
+  }
+}
