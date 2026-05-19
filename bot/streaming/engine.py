@@ -102,3 +102,75 @@ async def play(
     quality = AudioQuality.HIGH
 
     media = MediaStream(
+        
+        stream_url,
+        audio_parameters=quality,
+    )
+
+    try:
+
+        if _active_chats.get(chat_id):
+
+            await call_py().change_stream(
+                chat_id,
+                media
+            )
+
+        else:
+
+            await call_py().join_group_call(
+                chat_id,
+                media
+            )
+
+            _active_chats[chat_id] = True
+
+        await queue_engine.set_current(
+            chat_id,
+            track
+        )
+
+        await redis_db.set_active_stream(
+            chat_id,
+            track
+        )
+
+        await redis_db.set_paused(
+            chat_id,
+            False
+        )
+
+        await mongodb.increment_play(
+            track.get("requester_id", 0),
+            chat_id,
+            track.get("title", "Unknown"),
+        )
+
+        await mongodb.add_to_history(
+            chat_id,
+            track
+        )
+
+        log.info(
+            "[PLAY] %s in chat %d",
+            track.get("title"),
+            chat_id
+        )
+
+        return True
+
+    except Exception as e:
+
+        log.error(
+            "[PLAY] Error in chat %d: %s",
+            chat_id,
+            e,
+            exc_info=True
+        )
+
+        _active_chats.pop(
+            chat_id,
+            None
+        )
+
+        return False
