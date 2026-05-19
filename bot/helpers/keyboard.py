@@ -107,4 +107,128 @@ def search_results_kb(results: list, chat_id: int) -> InlineKeyboardMarkup:
 
 # ── Playlist ───────────────────────────────────────────────────────────────────
 
-def playlist_kb(playlists: list, owner_id: int) ->
+def playlist_kb(playlists: list, owner_id: int) -> InlineKeyboardMarkup:
+    buttons = []
+
+    for pl in playlists:
+        name = pl.get("name", "Unnamed")[:30]
+
+        buttons.append([
+            InlineKeyboardButton(
+                f"📂 {name}",
+                callback_data=f"load_playlist:{owner_id}:{name}"
+            ),
+            InlineKeyboardButton(
+                "🗑",
+                callback_data=f"del_playlist:{owner_id}:{name}"
+            ),
+        ])
+
+    buttons.append([
+        InlineKeyboardButton("❌ Close", callback_data="close")
+    ])
+
+    return InlineKeyboardMarkup(buttons)
+
+
+# ── Settings ───────────────────────────────────────────────────────────────────
+
+def settings_kb(chat_id: int, settings: dict) -> InlineKeyboardMarkup:
+    loop_icon = "✅" if settings.get("loop") else "❌"
+    shuffle_icon = "✅" if settings.get("shuffle") else "❌"
+    auto_icon = "✅" if settings.get("autoplay") else "❌"
+    admin_icon = "✅" if settings.get("admin_only") else "❌"
+
+    return InlineKeyboardMarkup([
+        [
+            InlineKeyboardButton(
+                f"🔁 Loop: {loop_icon}",
+                callback_data=f"setting:loop:{chat_id}"
+            ),
+            InlineKeyboardButton(
+                f"🔀 Shuffle: {shuffle_icon}",
+                callback_data=f"setting:shuffle:{chat_id}"
+            ),
+        ],
+        [
+            InlineKeyboardButton(
+                f"▶️ Autoplay: {auto_icon}",
+                callback_data=f"setting:autoplay:{chat_id}"
+            ),
+            InlineKeyboardButton(
+                f"🛡 Admin Only: {admin_icon}",
+                callback_data=f"setting:admin_only:{chat_id}"
+            ),
+        ],
+        [
+            InlineKeyboardButton(
+                "🔊 Quality: Audio",
+                callback_data=f"setting:quality:{chat_id}"
+            ),
+        ],
+        [
+            InlineKeyboardButton("❌ Close", callback_data="close")
+        ],
+    ])
+
+
+# ── Help ───────────────────────────────────────────────────────────────────────
+
+def help_kb() -> InlineKeyboardMarkup:
+    return InlineKeyboardMarkup([
+        [
+            InlineKeyboardButton(
+                "🎵 Music",
+                callback_data="help:music"
+            ),
+            InlineKeyboardButton(
+                "⚙️ Admin",
+                callback_data="help:admin"
+            ),
+        ],
+        [
+            InlineKeyboardButton(
+                "🎛 Controls",
+                callback_data="help:controls"
+            ),
+            InlineKeyboardButton(
+                "📊 Stats",
+                callback_data="help:stats"
+            ),
+        ],
+        [
+            InlineKeyboardButton("❌ Close", callback_data="close")
+        ],
+    ])
+
+
+# ── Generic ────────────────────────────────────────────────────────────────────
+
+def close_kb() -> InlineKeyboardMarkup:
+    return InlineKeyboardMarkup([
+        [InlineKeyboardButton("❌ Close", callback_data="close")]
+    ])
+
+
+def confirm_kb(action: str, identifier: str) -> InlineKeyboardMarkup:
+    return InlineKeyboardMarkup([
+        [
+            InlineKeyboardButton(
+                "✅ Confirm",
+                callback_data=f"confirm:{action}:{identifier}"
+            ),
+            InlineKeyboardButton(
+                "❌ Cancel",
+                callback_data="close"
+            ),
+        ]
+    ])
+
+
+HELP_TEXTS = {
+    "play": "Use /play to play music.",
+    "pause": "Use /pause to pause music.",
+    "resume": "Use /resume to resume music.",
+    "skip": "Use /skip to skip current track.",
+    "stop": "Use /stop to stop playback."
+}
