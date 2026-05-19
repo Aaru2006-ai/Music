@@ -7,7 +7,7 @@ import json
 import logging
 from typing import Any, Optional
 
-import aioredis
+import redis.asyncio as aioredis
 
 from bot.config.config import Config
 
