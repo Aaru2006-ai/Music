@@ -9,7 +9,7 @@ from typing import Dict, Optional
 from pyrogram import Client
 from pytgcalls import PyTgCalls
 from pytgcalls.types import MediaStream, AudioQuality
-from pytgcalls.types.stream import StreamAudioEnded
+from pytgcalls.types.stream import StreamEnded
 
 from bot.database import redis_db, mongodb
 from bot.helpers import youtube as yt
@@ -30,7 +30,7 @@ def init_pytgcalls(assistant: Client) -> PyTgCalls:
     _call_py = PyTgCalls(assistant)
 
     @_call_py.on_stream_end()
-    async def _on_stream_end(_, update: StreamAudioEnded):
+    async def _on_stream_end(_, update: StreamEnded):
 
         log.info(
             "Stream ended in chat %d — advancing queue.",
