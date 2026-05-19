@@ -142,7 +142,7 @@ def confirm_kb(action: str, identifier: str) -> InlineKeyboardMarkup:
             InlineKeyboardButton("❌ Cancel",  callback_data="close"),
         ]
     ])
-      HELP_TEXTS = {
+      HELP_TEXTS ={
     "play": "Use /play to play music.",
     "pause": "Use /pause to pause music.",
     "resume": "Use /resume to resume music.",
