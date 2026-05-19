@@ -14,7 +14,7 @@ from pytgcalls.types.input_stream import AudioPiped
 from pytgcalls.types.input_stream.quality import HighQualityAudio
 from pytgcalls.types.stream import StreamEnded
 
-from bot.config.config import Config
+
 from bot.database import redis_db, mongodb
 from bot.helpers import youtube as yt
 from bot.streaming import queue as queue_engine
